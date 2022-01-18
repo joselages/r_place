@@ -1,0 +1,17 @@
+{
+  "name": "r_place",
+  "version": "1.0.0",
+  "description": "r/place-like project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.2",
+    "joi": "^17.5.0",
+    "mongoose": "^6.1.7",
+    "nodemon": "^2.0.15"
+  }
+}
