@@ -41,12 +41,34 @@
         <input type="color" id="color" name="picker">
     </div>
     <script>
+
+        async function getPixels(){
+            const request = await fetch('/pixels',{
+                method: 'GET',
+                headers: {"Content-Type": "application/json"}
+            });
+
+            const response = await request.json();
+
+            return response;
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+
+            const pixels = await getPixels();
+
+            for(pixel of pixels){
+                paintCanvas(pixel);
+            }
+
+        })
+
         const canvas = document.getElementById('myCanvas');
         const ctx = canvas.getContext('2d');
 
-        function paintCanvas(pos){
-            ctx.fillStyle = pickedColor;
-            ctx.fillRect(pos.x, pos.y, 1, 1);
+        function paintCanvas(pixel){
+            ctx.fillStyle = pixel.color;
+            ctx.fillRect(pixel.x, pixel.y, 1, 1);
         }
 
 
@@ -62,15 +84,14 @@
             const x = evt.pageX - evt.target.offsetLeft;
             const y = evt.pageY - evt.target.offsetTop;
             const realPos = convertPos(x, y);
-            paintCanvas(realPos);
-
+            
             let data = {
                 "x":realPos.x,
                 "y":realPos.y,
                 "color": pickedColor
             }
-
-            console.log(data)
+            
+            paintCanvas(data);
 
             const request = await fetch('/pixels',{
                 method: 'POST',
