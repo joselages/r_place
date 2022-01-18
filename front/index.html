@@ -65,19 +65,25 @@
             paintCanvas(realPos);
 
             let data = {
-                'x':realPos.x,
-                'y':realPos.y,
-                'color': pickedColor
+                "x":realPos.x,
+                "y":realPos.y,
+                "color": pickedColor
             }
 
+            console.log(data)
 
-            const response = await fetch('/pixels',{
+            const request = await fetch('/pixels',{
                 method: 'POST',
-                header:{'Content-Type': 'application/json'},
+                headers: {"Content-Type": "application/json"},
                 body:JSON.stringify(data)
             });
 
+            const response = await request.json();
 
+            if(request.status !== 202){
+                console.error('Something went wrong, please try agan later');
+                return;
+            }
 
             console.log(response);
         })

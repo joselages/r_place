@@ -1,8 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 
-
-
 const pixelRouter = require('./routes/pixels.js');
 
 const app = express();

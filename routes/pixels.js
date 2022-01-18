@@ -15,14 +15,18 @@ router.get('/', async (req,res)=>{
 
 router.post('/', async (req, res) => {
 
-    const body = req.body;
+    const newPixel = req.body;
 
-    console.log(body)
-    // const pixel = new Pixel(test);
 
-    // await pixel.save();
-
-    res.status(202).send(body);
+    try{
+        const pixel = await new Pixel(newPixel);
+        
+        await pixel.save();
+        
+        res.status(202).send(newPixel);
+    } catch(ex){
+        res.status(400).send({ message: "Bad request" });
+    }
 
 });
 
