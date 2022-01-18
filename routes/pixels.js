@@ -15,17 +15,14 @@ router.get('/', async (req,res)=>{
 
 router.post('/', async (req, res) => {
 
-    const test = {
-        color: '#00F000',
-        x: 1,
-        y:2,
-    };
+    const body = req.body;
 
-    const pixel = new Pixel(test);
+    console.log(body)
+    // const pixel = new Pixel(test);
 
-    await pixel.save();
+    // await pixel.save();
 
-    res.status(202).send(pixel)
+    res.status(202).send(body);
 
 });
 

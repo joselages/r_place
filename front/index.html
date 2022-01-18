@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>R_Place</title>
+    <style>
+        canvas {
+            outline: 5px solid rgb(197, 197, 197);
+            width: 800px;
+            height: 800px;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+            margin: 10px;
+        }
+
+        .colors{
+            display: flex;
+            gap:10px
+        }
+
+        .colors span{
+            height: 25px;
+            width: 25px;
+            background-color: var(--color);
+            cursor: pointer;
+        }
+
+        .colors span.-active{
+            transform:scale(1.2);
+            box-shadow: 0 0 2px grey;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="myCanvas" width="50" height="50"></canvas>
+    <div>
+        <label for="picker">Pick your color:</label>
+        <input type="color" id="color" name="picker">
+    </div>
+    <script>
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function paintCanvas(pos){
+            ctx.fillStyle = pickedColor;
+            ctx.fillRect(pos.x, pos.y, 1, 1);
+        }
+
+
+        const canvasZoomSize = canvas.clientHeight;
+        const canvasRealSize = Number(canvas.attributes.width.value);
+        function convertPos(x, y) {
+            const realX = Math.floor(canvasRealSize * x / canvasZoomSize);
+            const realY = Math.floor(canvasRealSize * y / canvasZoomSize);
+            return { x: realX, y: realY };
+        }
+
+        canvas.addEventListener('click', async (evt) => {
+            const x = evt.pageX - evt.target.offsetLeft;
+            const y = evt.pageY - evt.target.offsetTop;
+            const realPos = convertPos(x, y);
+            paintCanvas(realPos);
+
+            let data = {
+                'x':realPos.x,
+                'y':realPos.y,
+                'color': pickedColor
+            }
+
+
+            const response = await fetch('/pixels',{
+                method: 'POST',
+                header:{'Content-Type': 'application/json'},
+                body:JSON.stringify(data)
+            });
+
+
+
+            console.log(response);
+        })
+
+        const colorPicker = document.querySelector('#color');
+        let pickedColor = '#000000';
+            colorPicker.addEventListener('change', (evt) => {
+                pickedColor = evt.target.value;
+                console.log(pickedColor)
+            })
+    </script>
+</body>
+
+</html>
