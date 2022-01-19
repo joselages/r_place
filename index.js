@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 
 const pixelRouter = require('./routes/pixels.js');
+const userRouter = require('./routes/user.js');
 
 const app = express();
 app.use(express.json());
@@ -17,5 +18,6 @@ app.get('/', (req,res) => {
 })
 
 app.use('/pixels', pixelRouter);
+app.use('/users', userRouter);
 
 app.listen(3000);
