@@ -88,7 +88,8 @@
             let data = {
                 "x":realPos.x,
                 "y":realPos.y,
-                "color": pickedColor
+                "color": pickedColor,
+                "user_id":1
             }
             
             paintCanvas(data);
@@ -106,15 +107,16 @@
                 return;
             }
 
-            console.log(response);
-        })
+        });
+
+
 
         const colorPicker = document.querySelector('#color');
         let pickedColor = '#000000';
-            colorPicker.addEventListener('change', (evt) => {
-                pickedColor = evt.target.value;
-                console.log(pickedColor)
-            })
+        colorPicker.addEventListener('change', (evt) => {
+            pickedColor = evt.target.value;
+            console.log(pickedColor)
+        });
     </script>
 </body>
 

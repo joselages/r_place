@@ -15,16 +15,18 @@ router.get('/', async (req,res)=>{
 
 router.post('/', async (req, res) => {
 
-    const newPixel = req.body;
-
+    let newPixel = req.body;
+    
     try{
-
+        
         const exists = await Pixel.find({x:newPixel.x, y:newPixel.y}).lean();
         
         let pixel;
-
+        
         if(exists.length){
-
+            const now = new Date
+            newPixel['updated_at'] = now;
+            
             pixel = await Pixel.findByIdAndUpdate( exists[0]._id, newPixel,{
                 new: true,
               });
