@@ -17,6 +17,12 @@ app.get('/', (req,res) => {
 
 })
 
+app.get('/signup', (req,res) => {
+
+    res.sendFile(__dirname+'/front/signup.html')
+
+})
+
 app.use('/pixels', pixelRouter);
 app.use('/users', userRouter);
 

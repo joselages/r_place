@@ -2,6 +2,10 @@ const joi = require('joi');
 const bcrypt = require('bcrypt');
 const express = require('express');
 
+const app = express();
+
+app.use(express.json());
+
 const User = require('../models/User');
 
 const router = express.Router();
@@ -34,10 +38,7 @@ router.post('/', async (req,res) =>{
 
     }
     catch(ex){
-        console.log(ex)
         return res.status(400).send({ message: "Bad request" })
-
-
     }
 
 });
