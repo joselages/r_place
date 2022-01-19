@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 
 const pixelRouter = require('./routes/pixels.js');
 const userRouter = require('./routes/user.js');
+const loginRouter = require('./routes/login.js');
 
 const app = express();
 app.use(express.json());
@@ -23,7 +24,10 @@ app.get('/signup', (req,res) => {
 
 })
 
+
+
 app.use('/pixels', pixelRouter);
 app.use('/users', userRouter);
+app.use('/login', loginRouter);
 
 app.listen(3000);
