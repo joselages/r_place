@@ -5,10 +5,12 @@ const pixelRouter = require('./routes/pixels.js');
 const userRouter = require('./routes/user.js');
 const loginRouter = require('./routes/login.js');
 
+require('dotenv').config();
+
 const app = express();
 app.use(express.json());
 
-mongoose.connect(`mongodb://localhost/r_place`)
+mongoose.connect(`mongodb://${process.env.DB_HOST}/${process.env.DB_NAME}`)
 .then((data)=> console.log('connected'))
 .catch((err)=>console.log(err))
 
@@ -30,4 +32,4 @@ app.use('/pixels', pixelRouter);
 app.use('/users', userRouter);
 app.use('/login', loginRouter);
 
-app.listen(3000);
+app.listen(process.env.PORT);

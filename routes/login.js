@@ -1,6 +1,7 @@
 const joi = require('joi');
 const bcrypt = require('bcrypt');
 const express = require('express');
+const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 const User = require('../models/User');
@@ -26,7 +27,7 @@ router.post('/', async (req, res) => {
         return res.status(400).send({message:error.details[0].message});
     }
 
-    const user = await User.findOne({email:login.email}).lean();
+    const user = await User.findOne({email: login.email}).lean();
     if(!user){
         return res.status(401).send({ message: "Invalid email or password" });
     }
@@ -37,9 +38,21 @@ router.post('/', async (req, res) => {
         return res.status(401).send({ message: "Invalid email or password" });
     }
 
-    //gerar jwt
+    const payload = {
+        _id: user._id,
+        name: user.username,
+        email: user.email
+    }
 
-    res.send(login)
+    jwt.sign(payload, process.env.JWT_SECRET_KEY, (err, token) => {
+
+        if(err){
+            return res.status(500).send({ message: "Server error" })
+        }
+
+        res.header({ "X-Auth-Token": token }).send({ "X-Auth-Token": token })
+    });
+
 })
 
 module.exports = router;
