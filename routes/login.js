@@ -11,9 +11,12 @@ const validationSchema = joi.object({
     password: joi.string().min(8).max(100).required(),
 });
 
-router.get('/login', (req,res) => {
+const { dirname } = require('path');
+const appDir = dirname(require.main.filename);
 
-    res.sendFile(__dirname+'/front/login.html')
+router.get('/', (req,res) => {
+
+    res.sendFile(appDir+'/front/login.html')
 
 })
 

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+</head>
+<body>
+    <form class="js-loginForm">
+        <div>
+            <label>
+                Email
+                <input type="email" name="email" maxlength="252" required>
+            </label>
+        </div>
+        <div>
+            <label>
+                Password
+                <input type="password" name="password" minlength="8" maxlength="100" required>
+            </label>
+        </div>
+        <div>
+            <button type="submit" name="submit">Submit</button>
+        </div>
+    </form>
+
+    <script>
+        const form = document.querySelector('.js-loginForm');
+
+        function validateUser(data){
+
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+            if(
+                emailRegex.test(data['email']) && 
+                data['password'].length > 7 && data['password'].length < 101
+            ){
+                return true;
+            }
+
+            return false;
+        }
+
+        form.addEventListener('submit', async (evt) => {
+            evt.preventDefault();
+            
+            let data = {};
+
+            for(input of evt.target.elements){
+                data[input.name] = input.value;
+            }
+
+            if(validateUser(data) === false){
+                return console.log('error');
+            }
+
+            delete data['submit'];
+
+            const request = await fetch('/login',{
+                method: 'POST',
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(data)
+            });
+
+            const response = await request.json();
+
+            if(request.status !== 200){
+                return console.error(response)
+            }
+
+            //enviar para o localstorage
+            localStorage.setItem('rPlaceLoginJWT', response['X-Auth-Token']);
+            window.location = '/';        
+        });
+    </script>
+</body>
+</html>

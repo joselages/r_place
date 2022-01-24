@@ -27,7 +27,6 @@ app.get('/signup', (req,res) => {
 })
 
 
-
 app.use('/pixels', pixelRouter);
 app.use('/users', userRouter);
 app.use('/login', loginRouter);
