@@ -35,12 +35,38 @@
 </head>
 
 <body>
+    <header>
+        <nav>
+            <button class="js-logoutBtn">Logout</button>
+            <a href="/login" class="js-loginBtn">Login</a>
+        </nav>
+    </header>
     <canvas id="myCanvas" width="50" height="50"></canvas>
     <div>
         <label for="picker">Pick your color:</label>
         <input type="color" id="color" name="picker">
     </div>
     <script>
+
+        const logoutBtn = document.querySelector('.js-logoutBtn');
+        const loginBtn = document.querySelector('.js-loginBtn');
+        const isLogged = localStorage.getItem('rPlaceLoginJWT');
+
+        if(!isLogged){
+            logoutBtn.remove();
+        } else {
+            loginBtn.remove();
+        }
+
+        logoutBtn.addEventListener('click', () => {
+
+           if( !isLogged ){
+               return;
+           }
+
+           localStorage.removeItem('rPlaceLoginJWT');
+           window.location = '/';        
+        });
 
         async function getPixels(){
             const request = await fetch('/pixels',{
