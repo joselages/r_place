@@ -68,7 +68,6 @@
                 return console.error(response)
             }
 
-            //enviar para o localstorage
             localStorage.setItem('rPlaceLoginJWT', response['X-Auth-Token']);
             window.location = '/';        
         });

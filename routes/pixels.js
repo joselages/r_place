@@ -1,5 +1,6 @@
 const joi = require('joi');
 const express = require('express');
+const auth = require('../middleware/auth');
 
 const Pixel = require('../models/Pixel');
 
@@ -13,10 +14,12 @@ router.get('/', async (req,res)=>{
 
 });
 
-router.post('/', async (req, res) => {
+router.post('/', auth, async (req, res) => {
 
     let newPixel = req.body;
-    
+    newPixel['user_id'] = req.userPayload._id;
+    //falta a validação do pixel
+
     try{
         
         const exists = await Pixel.find({x:newPixel.x, y:newPixel.y}).lean();

@@ -88,25 +88,26 @@
             let data = {
                 "x":realPos.x,
                 "y":realPos.y,
-                "color": pickedColor,
-                "user_id":1
+                "color": pickedColor
+            }
+            
+            const request = await fetch('/pixels',{
+                method: 'POST',
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-Auth-Token": localStorage.getItem('rPlaceLoginJWT')
+                },
+                body:JSON.stringify(data)
+            });
+            
+            const response = await request.json();
+            
+            if(request.status !== 202){
+                console.error('Something went wrong, please try again later');
+                return;
             }
             
             paintCanvas(data);
-
-            const request = await fetch('/pixels',{
-                method: 'POST',
-                headers: {"Content-Type": "application/json"},
-                body:JSON.stringify(data)
-            });
-
-            const response = await request.json();
-
-            if(request.status !== 202){
-                console.error('Something went wrong, please try agan later');
-                return;
-            }
-
         });
 
 
