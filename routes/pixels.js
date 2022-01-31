@@ -6,6 +6,12 @@ const Pixel = require('../models/Pixel');
 
 const router = express.Router();
 
+const validationSchema = joi.object({
+    color: joi.string().trim().min(7).max(7).required(),
+    x: joi.number().min(0).max(49).required(),
+    y: joi.number().min(0).max(49).required()
+})
+
 router.get('/', async (req,res)=>{
 
     const pixels = await Pixel.find().populate('user_id','username').lean();
@@ -17,6 +23,13 @@ router.get('/', async (req,res)=>{
 router.post('/', auth, async (req, res) => {
 
     let newPixel = req.body;
+
+    const error = validationSchema.validate(newPixel).error;
+
+    if(error){
+        return res.status(400).send({message:error.details[0].message})
+    }
+
     newPixel['user_id'] = req.userPayload._id;
     //falta a validação do pixel
 

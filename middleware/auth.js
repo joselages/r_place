@@ -10,7 +10,7 @@ module.exports = (req,res,next) => {
 
     jwt.verify(token, process.env.JWT_SECRET_KEY, (err, payload) => {
         if( err ){
-            return res.status(400).send({message:'Token in wrong format'});
+            return res.status(400).send({message:err});
         }
 
         req.userPayload = payload;
