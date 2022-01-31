@@ -61,7 +61,10 @@
     </div>
 
 
+    <script src="/socket.io/socket.io.js"></script>
+
     <script>
+        var socket = io();
 
         const logoutBtn = document.querySelector('.js-logoutBtn');
         const loginBtn = document.querySelector('.js-loginBtn');
@@ -182,12 +185,36 @@
             
             data['created_at'] = new Date;
             data['user_id'] = {'username':localStorage.getItem('rPlaceUserName')}
-            pixels.push(data)
 
             paintCanvas(data);
+            socket.emit('pixel', data);
         });
 
+        function updatePixel(data) {
 
+            let existingPixel = -1;
+
+            for(px in pixels){
+                if(
+                    pixels[px].x === data.x &&
+                    pixels[px].y === data.y
+                ){
+                    existingPixel = px;
+                    break;
+                }   
+            }
+
+            if(existingPixel < 0){
+                pixels.push(data)
+            } else {
+                pixels[existingPixel] = data;
+            }
+        }
+
+        socket.on('pixel', (data) => {
+            updatePixel(data);
+            paintCanvas(data);
+        });
 
         const colorPicker = document.querySelector('#color');
         let pickedColor = '#000000';
