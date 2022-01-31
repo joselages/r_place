@@ -53,7 +53,10 @@ router.post('/', async (req, res) => {
             return res.status(500).send({ message: "Server error" })
         }
 
-        res.header({ "X-Auth-Token": token }).send({ "X-Auth-Token": token })
+        res.header({ "X-Auth-Token": token }).send({
+             "X-Auth-Token": token,
+             "username": user.username 
+        })
     });
 
 })

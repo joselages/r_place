@@ -69,6 +69,7 @@
             }
 
             localStorage.setItem('rPlaceLoginJWT', response['X-Auth-Token']);
+            localStorage.setItem('rPlaceUserName', response['username']);
             window.location = '/';        
         });
     </script>

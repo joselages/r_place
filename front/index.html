@@ -80,6 +80,7 @@
            }
 
            localStorage.removeItem('rPlaceLoginJWT');
+           localStorage.removeItem('rPlaceUserName');
            window.location = '/';        
         });
 
@@ -128,22 +129,29 @@
             const y = evt.pageY - evt.target.offsetTop;
             const realPos = convertPos(x, y);
             
-            const found = pixels.find(pix => pix.x === realPos.x && pix.y === realPos.y)
+            const foundPixel = pixels.find(pix => pix.x === realPos.x && pix.y === realPos.y)
 
             if(
-                found === undefined
+                foundPixel === undefined
             ){
                 pixelInfo.style.display = 'none';
                 return
             }
 
-            pixelInfo.innerHTML = `by ${found.user_id.username}<br>at ${found.created_at}`
+            pixelInfo.innerHTML = `by ${foundPixel.user_id.username}<br>at ${makeDateReadable(foundPixel.created_at)}`
             pixelInfo.style.top = y + 'px';
             pixelInfo.style.left = x + 'px';
             pixelInfo.style.display = 'block';
-        })
+        });
 
-        canvas.addEventListener('mouseleave', () => pixelInfo.style.display = 'none')
+        function makeDateReadable(date){
+            date = new Date(date);
+
+            return `${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+
+        }
+
+        canvas.addEventListener('mouseleave', () => pixelInfo.style.display = 'none');
 
         canvas.addEventListener('click', async (evt) => {
             const x = evt.pageX - evt.target.offsetLeft;
@@ -172,6 +180,10 @@
                 return;
             }
             
+            data['created_at'] = new Date;
+            data['user_id'] = {'username':localStorage.getItem('rPlaceUserName')}
+            pixels.push(data)
+
             paintCanvas(data);
         });
 
