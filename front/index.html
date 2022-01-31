@@ -50,6 +50,8 @@
             <button class="js-logoutBtn">Logout</button>
             <a href="/login" class="js-loginBtn">Login</a>
         </nav>
+
+        <span class="js-userCount"></span>
     </header>
     <canvas id="myCanvas" width="50" height="50"></canvas>
     <div>
@@ -219,6 +221,17 @@
         socket.on('pixel', (data) => {
             updatePixel(data);
             paintCanvas(data);
+        });
+
+        const userCount = document.querySelector('.js-userCount');
+        socket.on('user count', (users) => {
+            let msg = `There are ${users} users online`
+
+            if(users === 1){
+                msg = `There is ${users} user online`
+            }
+
+            userCount.innerText = msg;
         });
 
         const colorPicker = document.querySelector('#color');
