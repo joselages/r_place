@@ -8,7 +8,7 @@ const router = express.Router();
 
 router.get('/', async (req,res)=>{
 
-    const pixels = await Pixel.find();
+    const pixels = await Pixel.find().populate('user_id','username').lean();
 
     res.send(pixels);
 

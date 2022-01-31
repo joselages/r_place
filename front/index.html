@@ -31,6 +31,15 @@
             transform:scale(1.2);
             box-shadow: 0 0 2px grey;
         }
+
+        .pixel_info{
+            position: fixed;
+            padding: 10px;
+            background: #000;
+            color:white;
+            transform: translateY(-40px);
+            display: none;
+        }
     </style>
 </head>
 
@@ -46,12 +55,18 @@
         <label for="picker">Pick your color:</label>
         <input type="color" id="color" name="picker">
     </div>
+
+    <div class="pixel_info js-pixelInfo">
+        ola
+    </div>
+
+
     <script>
 
         const logoutBtn = document.querySelector('.js-logoutBtn');
         const loginBtn = document.querySelector('.js-loginBtn');
         const isLogged = localStorage.getItem('rPlaceLoginJWT');
-
+        
         if(!isLogged){
             logoutBtn.remove();
         } else {
@@ -79,10 +94,11 @@
             return response;
         }
 
+        let pixels;
         document.addEventListener('DOMContentLoaded', async () => {
 
-            const pixels = await getPixels();
-
+            pixels = await getPixels();
+            
             for(pixel of pixels){
                 paintCanvas(pixel);
             }
@@ -105,6 +121,29 @@
             const realY = Math.floor(canvasRealSize * y / canvasZoomSize);
             return { x: realX, y: realY };
         }
+
+        const pixelInfo = document.querySelector('.js-pixelInfo');
+        canvas.addEventListener('mousemove', (evt) => {
+            const x = evt.pageX - evt.target.offsetLeft;
+            const y = evt.pageY - evt.target.offsetTop;
+            const realPos = convertPos(x, y);
+            
+            const found = pixels.find(pix => pix.x === realPos.x && pix.y === realPos.y)
+
+            if(
+                found === undefined
+            ){
+                pixelInfo.style.display = 'none';
+                return
+            }
+
+            pixelInfo.innerHTML = `by ${found.user_id.username}<br>at ${found.created_at}`
+            pixelInfo.style.top = y + 'px';
+            pixelInfo.style.left = x + 'px';
+            pixelInfo.style.display = 'block';
+        })
+
+        canvas.addEventListener('mouseleave', () => pixelInfo.style.display = 'none')
 
         canvas.addEventListener('click', async (evt) => {
             const x = evt.pageX - evt.target.offsetLeft;
@@ -142,7 +181,6 @@
         let pickedColor = '#000000';
         colorPicker.addEventListener('change', (evt) => {
             pickedColor = evt.target.value;
-            console.log(pickedColor)
         });
     </script>
 </body>
