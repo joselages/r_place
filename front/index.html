@@ -46,6 +46,7 @@
 <body>
     <header>
         <nav>
+            <span class="js-welcomeMsg"></span>
             <button class="js-logoutBtn">Logout</button>
             <a href="/login" class="js-loginBtn">Login</a>
         </nav>
@@ -68,11 +69,15 @@
 
         const logoutBtn = document.querySelector('.js-logoutBtn');
         const loginBtn = document.querySelector('.js-loginBtn');
+        const welcomeMsg = document.querySelector('.js-welcomeMsg');
         const isLogged = localStorage.getItem('rPlaceLoginJWT');
+        const userName = localStorage.getItem('rPlaceUserName');
+
         
         if(!isLogged){
             logoutBtn.remove();
         } else {
+            welcomeMsg.innerText = `Hello ${userName}`
             loginBtn.remove();
         }
 
@@ -184,7 +189,7 @@
             }
             
             data['created_at'] = new Date;
-            data['user_id'] = {'username':localStorage.getItem('rPlaceUserName')}
+            data['user_id'] = {'username':userName}
 
             paintCanvas(data);
             socket.emit('pixel', data);
