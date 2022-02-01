@@ -284,6 +284,10 @@
         for(tile of colorPicker){
             tile.addEventListener('click', (evt) => {
 
+                if(!isLogged){
+                    return showError('Please login to play');
+                }
+
                 if(evt.target.classList.contains('-active')) return;
 
                 const activeTiles = document.querySelectorAll('.js-color.-active');

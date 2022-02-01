@@ -53,6 +53,9 @@
             <button type="submit" name="submit">Submit</button>
         </div>
     </form>
+    <span>Or you can <a href="/login">login</a></span>
+
+
 
     <script>
         const form = document.querySelector('.js-signUpForm');
@@ -83,7 +86,7 @@
             }
 
             if(validateUser(data) === false){
-                return console.log('error');
+                return showError('Please fill the form correctly');
             }
 
             delete data['repeat_password'];

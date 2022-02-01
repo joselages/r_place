@@ -69,7 +69,7 @@
             }
 
             if(validateUser(data) === false){
-                return console.log('error');
+                return showError('Please fill the form correctly');
             }
 
             delete data['submit'];
