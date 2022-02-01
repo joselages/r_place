@@ -4,6 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Signup</title>
+
+    <style>
+        .message_overlay{
+            position: fixed;
+            inset: -1px;
+            display: grid;
+            place-items: center;
+            background: rgba(8, 8, 8, 0.65);
+        }
+
+        .message{
+            padding:40px 80px;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            gap:15px
+        }
+    </style>
 </head>
 <body>
     <form class="js-signUpForm">
@@ -80,13 +98,30 @@
             const response = await request.json();
 
             if(request.status !== 202){
-                return console.error(response)
+                return showError(response.message)
             }
 
-            console.log('User Criado!')
-            console.log(response)
+            showError('You can login now!')
             
         });
+
+        
+        function showError(msg){
+            let htmlToInject = `
+                <div class="message_overlay js-msgOverlay">
+                    <div class="message">
+                        ${msg}
+                        <button class="js-closeMsg">OK</button>
+                    </div>
+                </div>    
+            `;
+
+            document.querySelector('body').insertAdjacentHTML('beforeend', htmlToInject);
+
+            document.querySelector('.js-closeMsg').addEventListener('click', () => {
+                document.querySelector('.js-msgOverlay').remove();
+            })
+        }
     </script>
 </body>
 </html>
