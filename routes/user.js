@@ -7,6 +7,7 @@ const app = express();
 app.use(express.json());
 
 const User = require('../models/User');
+const { ignore } = require('nodemon/lib/rules');
 
 const router = express.Router();
 
@@ -27,6 +28,12 @@ router.post('/', async (req,res) =>{
     }
 
     try{
+
+        const existingEmail = await User.find({email:newUser.email}).lean();
+        
+        if(existingEmail.length){
+            return res.status(409).send({ message: "Email already exists" });
+        }
 
         newUser.password = await bcrypt.hash(newUser.password, 10);
 
