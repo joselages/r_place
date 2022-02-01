@@ -17,17 +17,19 @@
 
         .colors{
             display: flex;
-            gap:10px
+            gap:10px;
+            margin-top:10px;
         }
 
-        .colors span{
+        .color{
             height: 25px;
             width: 25px;
-            background-color: var(--color);
+            background-color: var(--colorBg);
             cursor: pointer;
+            border: 1px solid rgb(133, 133, 133)
         }
 
-        .colors span.-active{
+        .color.-active{
             transform:scale(1.2);
             box-shadow: 0 0 2px grey;
         }
@@ -37,7 +39,7 @@
             padding: 10px;
             background: #000;
             color:white;
-            transform: translateY(-40px);
+            transform: translateY(-15px);
             display: none;
         }
     </style>
@@ -55,17 +57,28 @@
     </header>
     <canvas id="myCanvas" width="50" height="50"></canvas>
     <div>
-        <label for="picker">Pick your color:</label>
-        <input type="color" id="color" name="picker">
+        <span for="picker">Pick your color:</span>
+        <div class="colors">
+            <div class="color js-color -active" data-color="#000000" style="--colorBg:#000000;"></div>
+            <div class="color js-color" data-color="#797979" style="--colorBg:#797979;"></div>
+            <div class="color js-color" data-color="#ffffff" style="--colorBg:#ffffff;"></div>
+            <div class="color js-color" data-color="#ff0000" style="--colorBg:#ff0000;"></div>
+            <div class="color js-color" data-color="#ff8800" style="--colorBg:#ff8800;"></div>
+            <div class="color js-color" data-color="#8d4b00" style="--colorBg:#8d4b00;"></div>
+            <div class="color js-color" data-color="#fffb00" style="--colorBg:#fffb00;"></div>
+            <div class="color js-color" data-color="#09ff00" style="--colorBg:#09ff00;"></div>
+            <div class="color js-color" data-color="#00fff2" style="--colorBg:#00fff2;"></div>
+            <div class="color js-color" data-color="#001aff" style="--colorBg:#001aff;"></div>
+            <div class="color js-color" data-color="#a200ff" style="--colorBg:#a200ff;"></div>
+            <div class="color js-color" data-color="#ff00f2" style="--colorBg:#ff00f2;"></div>
+
+        </div>
     </div>
 
-    <div class="pixel_info js-pixelInfo">
-        ola
-    </div>
+    <div class="pixel_info js-pixelInfo"></div>
 
 
     <script src="/socket.io/socket.io.js"></script>
-
     <script>
         var socket = io();
 
@@ -79,7 +92,7 @@
         if(!isLogged){
             logoutBtn.remove();
         } else {
-            welcomeMsg.innerText = `Hello ${userName}`
+            welcomeMsg.innerText = `Hello ${userName}!`
             loginBtn.remove();
         }
 
@@ -234,11 +247,29 @@
             userCount.innerText = msg;
         });
 
-        const colorPicker = document.querySelector('#color');
+        const colorPicker = document.querySelectorAll('.js-color');
         let pickedColor = '#000000';
-        colorPicker.addEventListener('change', (evt) => {
-            pickedColor = evt.target.value;
-        });
+
+        for(tile of colorPicker){
+            tile.addEventListener('click', (evt) => {
+
+                if(evt.target.classList.contains('-active')) return;
+
+                const activeTiles = document.querySelectorAll('.js-color.-active');
+
+                for(activeTile of activeTiles){
+                    activeTile.classList.remove('-active')
+                }
+
+                evt.target.classList.add('-active');
+
+                pickedColor = evt.target.dataset.color ?? '#000000';
+            })
+        }
+
+        // colorPicker.addEventListener('change', (evt) => {
+        //     pickedColor = evt.target.value;
+        // });
     </script>
 </body>
 
