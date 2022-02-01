@@ -31,7 +31,6 @@ router.post('/', auth, async (req, res) => {
     }
 
     newPixel['user_id'] = req.userPayload._id;
-    //falta a validação do pixel
 
     try{
         

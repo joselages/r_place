@@ -42,6 +42,22 @@
             transform: translateY(-15px);
             display: none;
         }
+
+        .message_overlay{
+            position: fixed;
+            inset: -1px;
+            display: grid;
+            place-items: center;
+            background: rgba(8, 8, 8, 0.65);
+        }
+
+        .message{
+            padding:40px 80px;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            gap:15px
+        }
     </style>
 </head>
 
@@ -71,7 +87,6 @@
             <div class="color js-color" data-color="#001aff" style="--colorBg:#001aff;"></div>
             <div class="color js-color" data-color="#a200ff" style="--colorBg:#a200ff;"></div>
             <div class="color js-color" data-color="#ff00f2" style="--colorBg:#ff00f2;"></div>
-
         </div>
     </div>
 
@@ -199,8 +214,7 @@
             const response = await request.json();
             
             if(request.status !== 202){
-                console.error('Something went wrong, please try again later');
-                return;
+                return showError(response.message);
             }
             
             data['created_at'] = new Date;
@@ -209,6 +223,23 @@
             paintCanvas(data);
             socket.emit('pixel', data);
         });
+
+        function showError(msg){
+            let htmlToInject = `
+                <div class="message_overlay js-msgOverlay">
+                    <div class="message">
+                        ${msg}
+                        <button class="js-closeMsg">OK</button>
+                    </div>
+                </div>    
+            `;
+
+            document.querySelector('body').insertAdjacentHTML('beforeend', htmlToInject);
+
+            document.querySelector('.js-closeMsg').addEventListener('click', () => {
+                document.querySelector('.js-msgOverlay').remove();
+            })
+        }
 
         function updatePixel(data) {
 
