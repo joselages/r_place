@@ -47,7 +47,7 @@
             position: absolute;
             bottom: -7px;
             left: 50%;
-            background-color: #0f172a;
+            background-color: #1e293b;
             transform: translateX(-50%) rotate(45deg);
         }
 
@@ -106,7 +106,7 @@
         </div>
     </main>
     
-    <div class="pixel_info js-pixelInfo shadow-md bg-slate-900 text-white rounded"></div>
+    <div class="pixel_info js-pixelInfo shadow-md shadow-slate-900/10 bg-slate-800 text-white rounded"></div>
 
 
     <script src="/socket.io/socket.io.js"></script>
@@ -247,7 +247,7 @@
                 <div class="message_overlay js-msgOverlay">
                     <div class="message shadow-md">
                         ${msg}
-                        <button class="js-closeMsg bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">OK</button>
+                        <button class="js-closeMsg bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md shadow-blue-500/20">OK</button>
                     </div>
                 </div>    
             `;
@@ -287,13 +287,13 @@
 
         const userCount = document.querySelector('.js-userCount');
         socket.on('user count', (users) => {
-            let msg = `There are ${users} users online`
+            let msg = `There are <b>${users}</b> users online`
 
             if(users === 1){
-                msg = `There is ${users} user online`
+                msg = `There is <b>${users}</b> user online`
             }
 
-            userCount.innerText = msg;
+            userCount.innerHTML = msg;
         });
 
         const colorPicker = document.querySelectorAll('.js-color');
