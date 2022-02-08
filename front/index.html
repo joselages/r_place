@@ -7,18 +7,16 @@
     <title>R_Place</title>
     <style>
         canvas {
-            outline: 5px solid rgb(197, 197, 197);
             width: 800px;
             height: 800px;
             image-rendering: pixelated;
             image-rendering: crisp-edges;
-            margin: 10px;
+            background-color: white;
         }
 
         .colors{
             display: flex;
             gap:10px;
-            margin-top:10px;
         }
 
         .color{
@@ -26,21 +24,31 @@
             width: 25px;
             background-color: var(--colorBg);
             cursor: pointer;
-            border: 1px solid rgb(133, 133, 133)
+            border: 1px solid rgb(191, 196, 204);
+            transition: transform .1s ease;
         }
 
         .color.-active{
             transform:scale(1.2);
-            box-shadow: 0 0 2px grey;
+            box-shadow: 0 0 #0000,  0 0 #0000, 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
         }
 
         .pixel_info{
             position: fixed;
             padding: 10px;
-            background: #000;
-            color:white;
-            transform: translateY(-15px);
+            transform: translateX(-50%) translateY(-130%);
             display: none;
+        }
+
+        .pixel_info::before{
+            content: '';
+            width: 15px;
+            height: 15px;
+            position: absolute;
+            bottom: -7px;
+            left: 50%;
+            background-color: #0f172a;
+            transform: translateX(-50%) rotate(45deg);
         }
 
         .message_overlay{
@@ -59,44 +67,52 @@
             gap:15px
         }
     </style>
+
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body>
-    <header>
+<body class="grid min-h-screen bg-slate-50 font-['Arial'] text-slate-600">
+    <header class="h-fit flex justify-between items-baseline py-2 px-4 bg-slate-200">
+        <span class="js-userCount font-medium">Loading...</span>
         <nav>
-            <span class="js-welcomeMsg"></span>
-            <button class="js-logoutBtn">Logout</button>
-            <a href="/login" class="js-loginBtn">Login</a>
+            <span class="js-welcomeMsg mr-8"></span>
+            <button class="js-logoutBtn bg-transparent text-blue-500 font font-semibold hover:opacity-50 py-1 px-2 border border-blue-500 rounded">Logout</button>
+            <a href="/login" class="js-loginBtn text-blue-500 font-semibold hover:underline">Login</a>
         </nav>
-
-        <span class="js-userCount"></span>
     </header>
-    <canvas id="myCanvas" width="50" height="50"></canvas>
-    <div>
-        <span for="picker">Pick your color:</span>
-        <div class="colors">
-            <div class="color js-color -active" data-color="#000000" style="--colorBg:#000000;"></div>
-            <div class="color js-color" data-color="#797979" style="--colorBg:#797979;"></div>
-            <div class="color js-color" data-color="#ffffff" style="--colorBg:#ffffff;"></div>
-            <div class="color js-color" data-color="#ff0000" style="--colorBg:#ff0000;"></div>
-            <div class="color js-color" data-color="#ff8800" style="--colorBg:#ff8800;"></div>
-            <div class="color js-color" data-color="#8d4b00" style="--colorBg:#8d4b00;"></div>
-            <div class="color js-color" data-color="#fffb00" style="--colorBg:#fffb00;"></div>
-            <div class="color js-color" data-color="#09ff00" style="--colorBg:#09ff00;"></div>
-            <div class="color js-color" data-color="#00fff2" style="--colorBg:#00fff2;"></div>
-            <div class="color js-color" data-color="#001aff" style="--colorBg:#001aff;"></div>
-            <div class="color js-color" data-color="#a200ff" style="--colorBg:#a200ff;"></div>
-            <div class="color js-color" data-color="#ff00f2" style="--colorBg:#ff00f2;"></div>
+    <main class="grid place-items-center">
+        <svg class="animate-spin h-7 w-7 text-blue-500 absolute top-2/4 left-2/4 js-loadingIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <div class="flex flex-col divide-y">
+            <div class="border-4 border-slate-200">
+                <canvas id="myCanvas" width="50" height="50" ></canvas>
+            </div>
+            <div class="flex items-center justify-center gap-3 bg-slate-200 p-3 border-4 border-slate-200">
+                <div class="color js-color -active" data-color="#000000" style="--colorBg:#000000;"></div>
+                <div class="color js-color" data-color="#797979" style="--colorBg:#797979;"></div>
+                <div class="color js-color" data-color="#ffffff" style="--colorBg:#ffffff;"></div>
+                <div class="color js-color" data-color="#ff0000" style="--colorBg:#ff0000;"></div>
+                <div class="color js-color" data-color="#ff8800" style="--colorBg:#ff8800;"></div>
+                <div class="color js-color" data-color="#8d4b00" style="--colorBg:#8d4b00;"></div>
+                <div class="color js-color" data-color="#fffb00" style="--colorBg:#fffb00;"></div>
+                <div class="color js-color" data-color="#09ff00" style="--colorBg:#09ff00;"></div>
+                <div class="color js-color" data-color="#00fff2" style="--colorBg:#00fff2;"></div>
+                <div class="color js-color" data-color="#001aff" style="--colorBg:#001aff;"></div>
+                <div class="color js-color" data-color="#a200ff" style="--colorBg:#a200ff;"></div>
+                <div class="color js-color" data-color="#ff00f2" style="--colorBg:#ff00f2;"></div>
+            </div>
         </div>
-    </div>
-
-    <div class="pixel_info js-pixelInfo"></div>
+    </main>
+    
+    <div class="pixel_info js-pixelInfo shadow-md bg-slate-900 text-white rounded"></div>
 
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
-        var socket = io();
-
+        const socket = io();
+        const loadingIcon = document.querySelector('.js-loadingIcon');
         const logoutBtn = document.querySelector('.js-logoutBtn');
         const loginBtn = document.querySelector('.js-loginBtn');
         const welcomeMsg = document.querySelector('.js-welcomeMsg');
@@ -107,7 +123,7 @@
         if(!isLogged){
             logoutBtn.remove();
         } else {
-            welcomeMsg.innerText = `Hello ${userName}!`
+            welcomeMsg.innerHTML = `Hello <span class="font-semibold">${userName}</span>!`
             loginBtn.remove();
         }
 
@@ -142,6 +158,8 @@
                 paintCanvas(pixel);
             }
 
+            loadingIcon.remove();
+
         })
 
         const canvas = document.getElementById('myCanvas');
@@ -153,7 +171,7 @@
         }
 
 
-        const canvasZoomSize = canvas.clientHeight;
+        const canvasZoomSize = canvas.offsetHeight;
         const canvasRealSize = Number(canvas.attributes.width.value);
         function convertPos(x, y) {
             const realX = Math.floor(canvasRealSize * x / canvasZoomSize);
@@ -165,6 +183,7 @@
         canvas.addEventListener('mousemove', (evt) => {
             const x = evt.pageX - evt.target.offsetLeft;
             const y = evt.pageY - evt.target.offsetTop;
+            
             const realPos = convertPos(x, y);
             
             const foundPixel = pixels.find(pix => pix.x === realPos.x && pix.y === realPos.y)
@@ -177,8 +196,8 @@
             }
 
             pixelInfo.innerHTML = `by ${foundPixel.user_id.username}<br>at ${makeDateReadable(foundPixel.created_at)}`
-            pixelInfo.style.top = y + 'px';
-            pixelInfo.style.left = x + 'px';
+            pixelInfo.style.top = evt.pageY + 'px';
+            pixelInfo.style.left = evt.pageX + 'px';
             pixelInfo.style.display = 'block';
         });
 
@@ -186,10 +205,9 @@
             date = new Date(date);
 
             return `${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
-
         }
 
-        canvas.addEventListener('mouseleave', () => pixelInfo.style.display = 'none');
+        canvas.addEventListener('mouseleave', () => {pixelInfo.style.display = 'none'});
 
         canvas.addEventListener('click', async (evt) => {
             const x = evt.pageX - evt.target.offsetLeft;
@@ -227,9 +245,9 @@
         function showError(msg){
             let htmlToInject = `
                 <div class="message_overlay js-msgOverlay">
-                    <div class="message">
+                    <div class="message shadow-md">
                         ${msg}
-                        <button class="js-closeMsg">OK</button>
+                        <button class="js-closeMsg bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">OK</button>
                     </div>
                 </div>    
             `;
