@@ -87,7 +87,7 @@
                 </label>
             </div>
             <div class="flex justify-between items-baseline">
-                <button type="submit" name="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md shadow-blue-500/20">Sign up</button>
+                <button type="submit" name="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md shadow-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none">Sign up</button>
                 <span class="ml-auto">...or you can <a class="font-semibold underline text-blue-500 hover:opacity-75" href="/login">login</a></span>
             </div>
         </form>
@@ -97,6 +97,7 @@
     
     <script>
         const form = document.querySelector('.js-signUpForm');
+        const formBtn = document.querySelector('.js-formBtn');
 
         function validateUser(data){
 
@@ -116,6 +117,7 @@
 
         form.addEventListener('submit', async (evt) => {
             evt.preventDefault();
+            formBtn.disabled = true;
             
             let data = {};
 
@@ -165,6 +167,7 @@
             `;
 
             form.insertAdjacentHTML('beforebegin', htmlToInject);
+            formBtn.disabled = false;
         }
     </script>
 </body>
