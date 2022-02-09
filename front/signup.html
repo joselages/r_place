@@ -21,42 +21,80 @@
             flex-direction: column;
             gap:15px
         }
+
+        .feedback-text::before{
+            content: '⚠';
+            margin-right: .5rem;
+        }
+
+        .form-feedback.-positive .feedback-text::before{
+            content: '👌';
+        }
+
+        .form-feedback{
+            animation: shake .75s ease forwards;
+        }
+
+        @keyframes shake{
+            10%, 90% {
+                transform: translate3d(-1px, 0, 0);
+            }
+            
+            20%, 80% {
+                transform: translate3d(2px, 0, 0);
+            }
+
+            30%, 50%, 70% {
+                transform: translate3d(-4px, 0, 0);
+            }
+
+            40%, 60% {
+                transform: translate3d(4px, 0, 0);
+            }
+        }
+
     </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+
 </head>
-<body>
-    <form class="js-signUpForm">
-        <div>
-            <label>
-                Username
-                <input type="text" name="username" minlength="5" maxlength="15" required>
-            </label>
-        </div>
-        <div>
-            <label>
-                Email
-                <input type="email" name="email" maxlength="252" required>
-            </label>
-        </div>
-        <div>
-            <label>
-                Password
-                <input type="password" name="password" minlength="8" maxlength="100" required>
-            </label>
-        </div>
-        <div>
-            <label>
-                Repeat Password
-                <input type="password" name="repeat_password" minlength="8" maxlength="100" required>
-            </label>
-        </div>
-        <div>
-            <button type="submit" name="submit">Submit</button>
-        </div>
-    </form>
-    <span>Or you can <a href="/login">login</a></span>
+<body class="grid place-items-center min-h-screen bg-slate-100 text-slate-600">
+    <div class="js-formContainer p-8 w-1/3 flex flex-col gap-5 shadow-lg shadow-blue-500/20 bg-white rounded border-t-8 border-blue-500/60">
+        <h1 class="text-3xl font-semibold text-blue-500">Sign up</h1>
+
+        <form class="js-signUpForm flex flex-col gap-3">
+            <div>
+                <label class="flex flex-col">
+                    Username
+                    <input class="rounded border border-gray-400 p-2 mt-1" type="text" name="username" minlength="5" maxlength="15" required>
+                </label>
+            </div>
+            <div>
+                <label class="flex flex-col">
+                    Email
+                    <input class="rounded border border-gray-400 p-2 mt-1" type="email" name="email" maxlength="252" required>
+                </label class="flex flex-col">
+            </div>
+            <div>
+                <label class="flex flex-col">
+                    Password
+                    <input class="rounded border border-gray-400 p-2 mt-1" type="password" name="password" minlength="8" maxlength="100" required>
+                </label>
+            </div>
+            <div>
+                <label class="flex flex-col">
+                    Repeat Password
+                    <input class="rounded border border-gray-400 p-2 mt-1" type="password" name="repeat_password" minlength="8" maxlength="100" required>
+                </label>
+            </div>
+            <div class="flex justify-between items-baseline">
+                <button type="submit" name="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded shadow-md shadow-blue-500/20">Sign up</button>
+                <span class="ml-auto">...or you can <a class="font-semibold underline text-blue-500 hover:opacity-75" href="/login">login</a></span>
+            </div>
+        </form>
+    </div>
 
 
-
+    
     <script>
         const form = document.querySelector('.js-signUpForm');
 
@@ -104,26 +142,29 @@
                 return showError(response.message)
             }
 
-            showError('You can login now!')
+            showError('You can login now. Have fun!', true)
             
         });
 
         
-        function showError(msg){
+        function showError(msg, isPositive = false){
+
+            if(document.querySelector('.js-formFeedback') !== null){
+                document.querySelector('.js-formFeedback').remove();
+            }
+
+            let feedbackStatus = 'red';
+            if(isPositive){
+                feedbackStatus = 'green';
+            }
+
             let htmlToInject = `
-                <div class="message_overlay js-msgOverlay">
-                    <div class="message">
-                        ${msg}
-                        <button class="js-closeMsg">OK</button>
-                    </div>
-                </div>    
+                <div class="js-formFeedback ${isPositive ? '-positive' :'' } form-feedback border border-${feedbackStatus}-200 p-2 rounded bg-${feedbackStatus}-100 text-${feedbackStatus}-800 text-center">
+                    <p role="alert" class="feedback-text font-semibold">${msg}</p>
+                </div> 
             `;
 
-            document.querySelector('body').insertAdjacentHTML('beforeend', htmlToInject);
-
-            document.querySelector('.js-closeMsg').addEventListener('click', () => {
-                document.querySelector('.js-msgOverlay').remove();
-            })
+            form.insertAdjacentHTML('beforebegin', htmlToInject);
         }
     </script>
 </body>
