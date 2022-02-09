@@ -204,7 +204,19 @@
         function makeDateReadable(date){
             date = new Date(date);
 
-            return `${date.getHours()}:${date.getMinutes()} ${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`
+            let hours = addZeroBefore(date.getHours());
+            let minutes = addZeroBefore(date.getMinutes());
+            let day = addZeroBefore(date.getDate());
+            let month = addZeroBefore(date.getMonth() + 1);
+            let year = date.getFullYear();
+            
+            
+
+            return `${hours}:${minutes} ${day}/${month}/${year}`
+        }
+
+        function addZeroBefore(n) {
+            return (n < 10 ? '0' : '') + n;
         }
 
         canvas.addEventListener('mouseleave', () => {pixelInfo.style.display = 'none'});
