@@ -6,9 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>R_Place</title>
     <style>
+        :root{
+            --headerHeight: 40px;
+            --canvasSize: 800px;
+        }
+
+
+        .header{
+            height: var(--headerHeight);
+        }
+
+        main{
+            height: calc(100vh - var(--headerHeight));
+        }
+
         canvas {
-            width: 800px;
-            height: 800px;
+            width: var(--canvasSize);
+            aspect-ratio: 1;
             image-rendering: pixelated;
             image-rendering: crisp-edges;
             background-color: white;
@@ -66,13 +80,24 @@
             flex-direction: column;
             gap:15px
         }
+
+        @media (max-width: 800px){
+            main, .game-container{
+                height: calc(100vh - 40px) !important;
+            }
+            .canvas-container{
+                width: 100%;
+                overflow: auto;
+            }
+
+        }
     </style>
 
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="grid min-h-screen bg-slate-50 font-['Arial'] text-slate-600">
-    <header class="h-fit flex justify-between items-baseline py-2 px-4 bg-slate-200">
+<body class="grid min-h-screen bg-slate-50 font-['Arial'] text-slate-600 overflow-x-hidden">
+    <header class="header flex justify-between items-baseline py-2 px-4 bg-slate-200">
         <span class="js-userCount font-medium">Loading...</span>
         <nav>
             <span class="js-welcomeMsg mr-8"></span>
@@ -85,11 +110,11 @@
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
-        <div class="flex flex-col divide-y">
-            <div class="border-4 border-slate-200">
+        <div class="game-container grid h-100 divide-y">
+            <div class="canvas-container border-4 border-slate-200 ">
                 <canvas id="myCanvas" width="50" height="50" ></canvas>
             </div>
-            <div class="flex items-center justify-center gap-3 bg-slate-200 p-3 border-4 border-slate-200">
+            <div class="colors-container flex flex-wrap items-center justify-center gap-3 bg-slate-200 p-3 border-4 border-slate-200">
                 <div class="color js-color -active" data-color="#000000" style="--colorBg:#000000;"></div>
                 <div class="color js-color" data-color="#797979" style="--colorBg:#797979;"></div>
                 <div class="color js-color" data-color="#ffffff" style="--colorBg:#ffffff;"></div>
