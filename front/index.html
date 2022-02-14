@@ -8,7 +8,6 @@
     <title>R_Place</title>
     <style>
         :root{
-            /* --headerHeight: 40px; */
             --canvasSize: 800px;
         }
 
@@ -89,7 +88,7 @@
         @media (max-width: 800px){
             main, .game-container{
                 
-                height: calc(100vh - var(--headerHeight));
+                height: calc(var(--vh) - var(--headerHeight));
             }
             .canvas-container{
                 width: 100%;
@@ -157,8 +156,15 @@
 
         function getHeaderHeight(){
             const headerHeight = document.querySelector('.header').offsetHeight;
-            document.querySelector('body').setAttribute('style',`--headerHeight:${headerHeight}px`) 
+            ddocument.documentElement.style.setProperty('--headerHeight',`${headerHeight}px`) 
         }
+
+        function setWindowHeight(){
+            const vh = window.innerHeight * 0.01;
+             document.documentElement.style.setProperty('--vh', `${vh}px`);
+        }
+
+        window.addEventListener('resize', () => setWindowHeight());
 
         if(!isLogged){
             logoutBtn.remove();
