@@ -13,6 +13,7 @@
 
         html{
             height: 100vh;
+            height: calc(var(--vh, 1vh) * 100);
         }
 
         body{
@@ -87,8 +88,7 @@
 
         @media (max-width: 800px){
             main, .game-container{
-                
-                height: calc(var(--vh) - var(--headerHeight));
+                height: calc(calc(var(--vh, 1vh) * 100) - var(--headerHeight));
             }
             .canvas-container{
                 width: 100%;
@@ -156,7 +156,7 @@
 
         function getHeaderHeight(){
             const headerHeight = document.querySelector('.header').offsetHeight;
-            ddocument.documentElement.style.setProperty('--headerHeight',`${headerHeight}px`) 
+            document.documentElement.style.setProperty('--headerHeight',`${headerHeight}px`) 
         }
 
         function setWindowHeight(){
@@ -199,6 +199,7 @@
         document.addEventListener('DOMContentLoaded', async () => {
  
             getHeaderHeight();
+            setWindowHeight()
 
             pixels = await getPixels();
             
