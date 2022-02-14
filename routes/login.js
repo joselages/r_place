@@ -49,9 +49,9 @@ router.post('/', async (req, res) => {
 
     jwt.sign(payload, process.env.JWT_SECRET_KEY, (err, token) => {
 
-        if(err){
-            return res.status(500).send({ message: err })
-        }
+        // if(err){
+        //     return res.status(500).send({ message: err })
+        // }
 
         res.header({ "X-Auth-Token": token }).send({
              "X-Auth-Token": token,
