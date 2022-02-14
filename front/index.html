@@ -259,8 +259,8 @@
         canvas.addEventListener('mouseleave', () => {pixelInfo.style.display = 'none'});
 
         canvas.addEventListener('click', async (evt) => {
-            const x = evt.pageX - evt.target.offsetLeft;
-            const y = evt.pageY - evt.target.offsetTop;
+            const x = evt.pageX - evt.target.offsetLeft + canvasCont.scrollLeft;
+            const y = evt.pageY - evt.target.offsetTop + canvasCont.scrollTop;
             const realPos = convertPos(x, y);
             
             let data = {
