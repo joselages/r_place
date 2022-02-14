@@ -94,7 +94,7 @@
 
         @media (max-width: 800px){
             main, .game-container{
-                height: calc(100vh - 40px) !important;
+                height: 100%;
             }
             .canvas-container{
                 width: 100%;
@@ -216,9 +216,10 @@
         }
 
         const pixelInfo = document.querySelector('.js-pixelInfo');
-        canvas.addEventListener('mousemove', (evt) => {
-            const x = evt.pageX - evt.target.offsetLeft;
-            const y = evt.pageY - evt.target.offsetTop;
+        const canvasCont = document.querySelector('.canvas-container');
+        canvas.addEventListener('mousemove', evt => {
+            const x = evt.pageX - evt.target.offsetLeft + canvasCont.scrollLeft;
+            const y = evt.pageY - evt.target.offsetTop + canvasCont.scrollTop;
             
             const realPos = convertPos(x, y);
             
