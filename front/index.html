@@ -8,19 +8,13 @@
     <title>R_Place</title>
     <style>
         :root{
-            --headerHeight: 40px;
+            /* --headerHeight: 40px; */
             --canvasSize: 800px;
         }
 
-/* 
-        .header{
-            height: var(--headerHeight);
-        } */
-/* 
-        main{
-            height: calc(100vh - var(--headerHeight));
-        } */
-
+        html{
+            height: 100vh;
+        }
 
         body{
             display: grid;
@@ -94,13 +88,19 @@
 
         @media (max-width: 800px){
             main, .game-container{
-                height: 100%;
+                
+                height: calc(100vh - var(--headerHeight));
             }
             .canvas-container{
                 width: 100%;
                 overflow: auto;
             }
+        }
 
+        @media (max-width: 550px){
+            .welcome-msg{
+                display: none;
+            }
         }
     </style>
 
@@ -111,7 +111,7 @@
     <header class="header flex justify-between items-baseline py-2 px-4 bg-slate-200">
         <span class="js-userCount font-medium">Loading...</span>
         <nav>
-            <span class="js-welcomeMsg mr-8"></span>
+            <span class="js-welcomeMsg welcome-msg mr-8"></span>
             <button class="js-logoutBtn bg-transparent text-blue-500 font font-semibold hover:opacity-50 py-1 px-2 border border-blue-500 rounded">Logout</button>
             <a href="/login" class="js-loginBtn text-blue-500 font-semibold hover:underline">Login</a>
         </nav>
@@ -155,7 +155,11 @@
         const isLogged = localStorage.getItem('rPlaceLoginJWT');
         const userName = localStorage.getItem('rPlaceUserName');
 
-        
+        function getHeaderHeight(){
+            const headerHeight = document.querySelector('.header').offsetHeight;
+            document.querySelector('body').setAttribute('style',`--headerHeight:${headerHeight}px`) 
+        }
+
         if(!isLogged){
             logoutBtn.remove();
         } else {
@@ -187,6 +191,8 @@
 
         let pixels;
         document.addEventListener('DOMContentLoaded', async () => {
+ 
+            getHeaderHeight();
 
             pixels = await getPixels();
             
