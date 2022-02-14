@@ -18,7 +18,7 @@ require('dotenv').config();
 app.use(express.json());
 
 
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI || process.env.DB_LOCAL)
 .then((data)=> console.log('connected'))
 .catch((err)=>console.log(err))
 
