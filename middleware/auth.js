@@ -7,7 +7,7 @@ module.exports = (req,res,next) => {
         return res.status(401).send({message:'Please login to play'});
     }
 
-    jwt.verify(token, process.env.JWT_SECRET_KEY, (err, payload) => {
+    jwt.verify(token, process.env.JWT_SECRET_KEY || process.env.HEROKU_JWT_SECRET, (err, payload) => {
         if( err ){
             return res.status(400).send({ 'message' : err.message});
         }
