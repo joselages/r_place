@@ -175,8 +175,6 @@
         </div>
     </aside>
 
-
-
     <main class="grid place-items-center">
         <svg class="animate-spin h-7 w-7 text-blue-500 absolute top-2/4 left-2/4 js-loadingIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
@@ -204,7 +202,6 @@
     </main>
     
     <div class="pixel_info js-pixelInfo shadow-md shadow-slate-900/10 bg-slate-800 text-white rounded whitespace-nowrap"></div>
-
 
     <script src="/socket.io/socket.io.js"></script>
     <script>
@@ -301,7 +298,12 @@
                         msg = 'Welcome <b>' + data.name + '</b>!';
                         break;
                     case 'paint':
-                        msg = 'Nice drawing <b>' + data.name + '</b>!';
+                        msg = 'Nice <b style="color:'+data.color+'">pixel</b>, <b>' + data.name + '</b>!';
+
+                        if(data.color === "#ffffff"){
+                            msg = 'Nice <b style="padding:2px;background:black;color:'+data.color+'">pixel</b>, <b>' + data.name + '</b>!';
+                        }
+
                         break;
                 }
 
@@ -402,7 +404,7 @@
 
             paintCanvas(data);
             socket.emit('pixel', data);
-            socket.emit('log', {'name': userName, action: 'paint'});
+            socket.emit('log', {'name': userName, 'action': 'paint', 'color': data.color});
         });
 
         function showError(msg){
