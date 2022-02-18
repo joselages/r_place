@@ -100,8 +100,7 @@
             display: flex;
             flex-direction: column;
             z-index: 9;
-
-            box-shadow: 0 0 5px rgba(6, 5, 71, 0.1);
+            transition:transform .1s ease;
         }
 
         .info-window.-close{
@@ -153,8 +152,8 @@
             <a href="/login" class="js-loginBtn text-blue-500 font-semibold hover:underline">Login</a>
         </nav>
     </header>
-    <aside class="info-window js-sideMenu js- bg-white/[.98] border-r-4 border-slate-200 rounded-tr">
-        <h1 class="text-3xl font-bold text-blue-500 mb-1">Welcome<br>to 🖍️R_Place!</h1>
+    <aside class="info-window js-sideMenu bg-white/[.98] border-r-4 border-slate-200">
+        <h1 class="text-2xl font-bold text-blue-500 mb-1">Welcome<br>to 🖍️R_Place!</h1>
         <p>If you didn't notice yet, this is a <a class="font-semibold underline text-blue-500 hover:opacity-75" href="https://reddit.fandom.com/wiki/Place" target="_blank">r/place</a> knock-off, but smaller and way shittier...<br>Login and have fun!</p>
 
         <span class="js-userCount font-medium mt-8">Loading...</span>
