@@ -43,6 +43,12 @@ app.use('/login', loginRouter);
 io.on('connection', (socket) => {
 
     io.emit('user count', socket.client.conn.server.clientsCount)
+
+    socket.on('log', (data) =>  {
+        console.log(data)
+        io.emit('checkin', data)
+    });
+
     socket.on('disconnect', () => io.emit('user count', socket.client.conn.server.clientsCount));
 
     socket.on('pixel', (data) => io.emit('pixel', data));

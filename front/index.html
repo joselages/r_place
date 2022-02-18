@@ -23,6 +23,8 @@
 
         header{
             height: fit-content;
+            position: relative;
+            z-index: 2;
         }
 
         canvas {
@@ -57,6 +59,7 @@
             padding: 10px;
             transform: translateX(-50%) translateY(-130%);
             display: none;
+            z-index: 999999;
         }
 
         .pixel_info::before{
@@ -86,6 +89,33 @@
             gap:15px
         }
 
+        .info-window{
+            position: fixed;
+            top:calc(var(--headerHeight) );
+            left:0;
+            width: 250px;
+            bottom:0;
+            padding:16px;
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            z-index: 9;
+
+            box-shadow: 0 0 5px rgba(6, 5, 71, 0.1);
+        }
+
+        .info-window.-close{
+            transform: translateX(-100%);
+        }
+
+        .info_box{
+            height: 50%;
+            overflow-y: auto;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
         @media (max-width: 800px){
             main, .game-container{
                 height: calc(calc(var(--vh, 1vh) * 100) - var(--headerHeight));
@@ -93,6 +123,7 @@
             .canvas-container{
                 width: 100%;
                 overflow: auto;
+                border-top: none !important;
             }
         }
 
@@ -108,20 +139,52 @@
 
 <body class="bg-slate-50 h-screen font-['Arial'] text-slate-600 overflow-x-hidden">
     <header class="header flex justify-between items-baseline py-2 px-4 bg-slate-200">
-        <span class="js-userCount font-medium">Loading...</span>
+
+        <button class="js-hideMenu text-xs font-bold p-1 text-blue-500/70 hover:opacity-75">
+            &lt; hide menu
+        </button>
+        <button class="js-openMenu text-xs hidden font-bold p-1 text-blue-500/70 hover:opacity-75">
+            &gt; show menu
+        </button>
+        
         <nav>
             <span class="js-welcomeMsg welcome-msg mr-8"></span>
             <button class="js-logoutBtn bg-transparent text-blue-500 font font-semibold hover:opacity-50 py-1 px-2 border border-blue-500 rounded">Logout</button>
             <a href="/login" class="js-loginBtn text-blue-500 font-semibold hover:underline">Login</a>
         </nav>
     </header>
+    <aside class="info-window js-sideMenu js- bg-white/[.98] border-r-4 border-slate-200 rounded-tr">
+
+
+
+        <h1 class="text-3xl font-bold text-blue-500 mb-1">Welcome<br>to 🖍️R_Place!</h1>
+        <p>If you didn't notice yet, this is a <a class="font-semibold underline text-blue-500 hover:opacity-75" href="https://reddit.fandom.com/wiki/Place" target="_blank">r/place</a> knock-off, but smaller and way shittier...<br>Login and have fun!</p>
+
+        <span class="js-userCount font-medium mt-8">Loading...</span>
+        <div class="js-infoWindow info_box my-2 p-2 bg-white border border-slate-200 rounded">
+
+        </div>
+
+        <div class="mt-auto ml-auto">
+            <ul>
+                <li><a class="hover:opacity-75"  href="https://www.github.com" target="_blank" >
+                    <svg height="32" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="30" fill="rgb(59 130 246)">
+                    <path fill-rule="evenodd"  d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+                </svg>
+            </a></li>
+            </ul>
+        </div>
+    </aside>
+
+
+
     <main class="grid place-items-center">
         <svg class="animate-spin h-7 w-7 text-blue-500 absolute top-2/4 left-2/4 js-loadingIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
         </svg>
         <div class="game-container grid h-100 divide-y">
-            <div class="canvas-container border-4 border-slate-200 ">
+            <div class="canvas-container border-4 border-slate-200 rounded">
                 <canvas id="myCanvas" width="50" height="50" ></canvas>
             </div>
             <div class="colors-container flex flex-wrap items-center justify-center gap-3 bg-slate-200 p-3 border-4 border-slate-200">
@@ -153,6 +216,24 @@
         const welcomeMsg = document.querySelector('.js-welcomeMsg');
         const isLogged = localStorage.getItem('rPlaceLoginJWT');
         const userName = localStorage.getItem('rPlaceUserName');
+        const infoWindow = document.querySelector('.js-infoWindow');
+        const closeMenu = document.querySelector('.js-hideMenu');
+        const openMenu = document.querySelector('.js-openMenu');
+        const sideMenu = document.querySelector('.js-sideMenu');
+
+
+        closeMenu.addEventListener('click',() => {
+            closeMenu.classList.add('hidden');
+            openMenu.classList.remove('hidden');
+            sideMenu.classList.add('-close')
+        });
+        openMenu.addEventListener('click',() =>{
+            closeMenu.classList.remove('hidden');
+            openMenu.classList.add('hidden');
+            sideMenu.classList.remove('-close')
+        });
+
+
 
         function getHeaderHeight(){
             const headerHeight = document.querySelector('.header').offsetHeight;
@@ -208,6 +289,26 @@
             }
 
             loadingIcon.remove();
+
+            if(isLogged){
+                socket.emit('log', {'name': userName, action: 'login'});
+            }
+            
+            socket.on('checkin', (data) => {
+                const newSpan = document.createElement('span');
+                let msg = '';
+                switch (data.action) {
+                    case 'login':
+                        msg = 'Welcome <b>' + data.name + '</b>!';
+                        break;
+                    case 'paint':
+                        msg = 'Nice drawing <b>' + data.name + '</b>!';
+                        break;
+                }
+
+                newSpan.innerHTML = msg;
+                infoWindow.appendChild(newSpan);
+            });
 
         })
 
@@ -302,6 +403,7 @@
 
             paintCanvas(data);
             socket.emit('pixel', data);
+            socket.emit('log', {'name': userName, action: 'paint'});
         });
 
         function showError(msg){
@@ -347,12 +449,13 @@
             paintCanvas(data);
         });
 
+
         const userCount = document.querySelector('.js-userCount');
         socket.on('user count', (users) => {
-            let msg = `There are <b>${users}</b> users online`
+            let msg = `👀 <b>${users}</b> people are watching...`
 
             if(users === 1){
-                msg = `There is <b>${users}</b> user online`
+                msg = `😔 You are the only one here`
             }
 
             userCount.innerHTML = msg;
