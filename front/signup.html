@@ -6,55 +6,7 @@
     <title>Signup</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🖍️</text></svg>">
 
-    <style>
-        .message_overlay{
-            position: fixed;
-            inset: -1px;
-            display: grid;
-            place-items: center;
-            background: rgba(8, 8, 8, 0.65);
-        }
-
-        .message{
-            padding:40px 80px;
-            background-color: white;
-            display: flex;
-            flex-direction: column;
-            gap:15px
-        }
-
-        .feedback-text::before{
-            content: '⚠';
-            margin-right: .5rem;
-        }
-
-        .form-feedback.-positive .feedback-text::before{
-            content: '👌';
-        }
-
-        .form-feedback{
-            animation: shake .75s ease forwards;
-        }
-
-        @keyframes shake{
-            10%, 90% {
-                transform: translate3d(-1px, 0, 0);
-            }
-            
-            20%, 80% {
-                transform: translate3d(2px, 0, 0);
-            }
-
-            30%, 50%, 70% {
-                transform: translate3d(-4px, 0, 0);
-            }
-
-            40%, 60% {
-                transform: translate3d(4px, 0, 0);
-            }
-        }
-
-    </style>
+    <link rel="stylesheet" href="styles/styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
 
 </head>

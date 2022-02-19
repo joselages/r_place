@@ -7,7 +7,7 @@ html{
     height: calc(var(--vh, 1vh) * 100);
 }
 
-body{
+body.index{
     display: grid;
     grid-template-rows: min-content auto;
 }
@@ -104,6 +104,37 @@ canvas {
     overflow-x: hidden;
     display: flex;
     flex-direction: column;
+}
+
+.feedback-text::before{
+    content: '⚠';
+    margin-right: .5rem;
+}
+
+.form-feedback{
+    animation: shake .75s ease forwards;
+}
+
+.form-feedback.-positive .feedback-text::before{
+    content: '👌';
+}
+
+@keyframes shake{
+    10%, 90% {
+        transform: translate3d(-1px, 0, 0);
+    }
+    
+    20%, 80% {
+        transform: translate3d(2px, 0, 0);
+    }
+
+    30%, 50%, 70% {
+        transform: translate3d(-4px, 0, 0);
+    }
+
+    40%, 60% {
+        transform: translate3d(4px, 0, 0);
+    }
 }
 
 @media (max-width: 800px){
