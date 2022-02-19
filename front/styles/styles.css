@@ -1,0 +1,124 @@
+:root{
+    --canvasSize: 800px;
+}
+
+html{
+    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
+}
+
+body{
+    display: grid;
+    grid-template-rows: min-content auto;
+}
+
+header{
+    height: fit-content;
+    position: relative;
+    z-index: 10;
+}
+
+canvas {
+    width: var(--canvasSize);
+    aspect-ratio: 1;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    background-color: white;
+}
+
+.colors{
+    display: flex;
+    gap:10px;
+}
+
+.color{
+    height: 25px;
+    width: 25px;
+    background-color: var(--colorBg);
+    cursor: pointer;
+    border: 1px solid rgb(191, 196, 204);
+    transition: transform .1s ease;
+}
+
+.color.-active{
+    transform:scale(1.2);
+    box-shadow: 0 0 #0000,  0 0 #0000, 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.pixel_info{
+    position: fixed;
+    padding: 10px;
+    transform: translateX(-50%) translateY(-130%);
+    display: none;
+    z-index: 999999;
+}
+
+.pixel_info::before{
+    content: '';
+    width: 15px;
+    height: 15px;
+    position: absolute;
+    bottom: -7px;
+    left: 50%;
+    background-color: #1e293b;
+    transform: translateX(-50%) rotate(45deg);
+}
+
+.message_overlay{
+    position: fixed;
+    inset: -1px;
+    display: grid;
+    place-items: center;
+    background: rgba(8, 8, 8, 0.65);
+}
+
+.message{
+    padding:40px 80px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    gap:15px
+}
+
+.info-window{
+    position: fixed;
+    top:calc(var(--headerHeight) - 1px );
+    left:0;
+    width: 250px;
+    bottom:0;
+    padding:16px;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    z-index: 9;
+    transition:transform .1s ease;
+}
+
+.info-window.-close{
+    transform: translateX(-100%);
+}
+
+.info_box{
+    height: 50%;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+}
+
+@media (max-width: 800px){
+    main, .game-container{
+        height: calc(calc(var(--vh, 1vh) * 100) - var(--headerHeight));
+    }
+    .canvas-container{
+        width: 100%;
+        overflow: auto;
+        border-top: none !important;
+    }
+}
+
+@media (max-width: 550px){
+    .welcome-msg{
+        display: none;
+    }
+}
