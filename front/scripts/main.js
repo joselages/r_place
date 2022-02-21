@@ -198,6 +198,7 @@ canvas.addEventListener('click', async (evt) => {
         return showError('<p>Please <a href="/login" class="font-semibold underline text-blue-500 hover:opacity-75">login</a> to play</p>');
     }
 
+    startCountDown({duration:5});
 
     canvas.style.pointerEvents = 'none';
     const x = evt.pageX - evt.target.offsetLeft + canvasCont.scrollLeft;
@@ -209,6 +210,7 @@ canvas.addEventListener('click', async (evt) => {
         "y":realPos.y,
         "color": pickedColor
     }
+    paintCanvas(data);
     
     const request = await fetch('/pixels',{
         method: 'POST',
@@ -228,8 +230,7 @@ canvas.addEventListener('click', async (evt) => {
     data['created_at'] = new Date;
     data['user_id'] = {'username':userName}
 
-    paintCanvas(data);
-    startCountDown({duration:5});
+
     canvas.removeAttribute('style');
     socket.emit('pixel', data);
     socket.emit('log', {'name': userName, 'action': 'paint', 'color': data.color});
