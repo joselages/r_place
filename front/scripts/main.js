@@ -69,6 +69,7 @@ async function getPixels(){
 let pixels;
 document.addEventListener('DOMContentLoaded', async () => {
 
+    canvas.style.pointerEvents = 'none';
     getHeaderHeight();
     setWindowHeight()
 
@@ -79,7 +80,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 
     loadingIcon.remove();
-
+    canvas.removeAttribute('style');
+    
     if(isLogged){
         socket.emit('log', {'name': userName, action: 'login'});
     }
@@ -167,7 +169,33 @@ function addZeroBefore(n) {
 
 canvas.addEventListener('mouseleave', () => {pixelInfo.style.display = 'none'});
 
+function startCountDown({duration}){
+
+    let start = duration;
+
+    //create and append countdown
+    const timeFeedbackOverlay = document.createElement('div');
+    timeFeedbackOverlay.classList.add( "time-overlay" );
+    const timeFeedbackNumber = document.createElement('span');
+    timeFeedbackNumber.textContent = start;
+    timeFeedbackOverlay.append(timeFeedbackNumber);
+    document.querySelector('body').appendChild(timeFeedbackOverlay);
+
+    //countdown interval
+    const countDown = setInterval(() => {
+        start--;
+        timeFeedbackNumber.textContent = start;
+        if(start <= 0){
+            clearInterval(countDown)
+            timeFeedbackOverlay.remove();
+        }
+    }, 1000);
+}
+
 canvas.addEventListener('click', async (evt) => {
+
+    canvas.style.pointerEvents = 'none';
+    startCountDown({duration:5});
     const x = evt.pageX - evt.target.offsetLeft + canvasCont.scrollLeft;
     const y = evt.pageY - evt.target.offsetTop + canvasCont.scrollTop;
     const realPos = convertPos(x, y);
@@ -197,6 +225,7 @@ canvas.addEventListener('click', async (evt) => {
     data['user_id'] = {'username':userName}
 
     paintCanvas(data);
+    canvas.removeAttribute('style');
     socket.emit('pixel', data);
     socket.emit('log', {'name': userName, 'action': 'paint', 'color': data.color});
 });
@@ -215,7 +244,9 @@ function showError(msg){
 
     document.querySelector('.js-closeMsg').addEventListener('click', () => {
         document.querySelector('.js-msgOverlay').remove();
-    })
+    });
+
+    canvas.removeAttribute('style');
 }
 
 function updatePixel(data) {
