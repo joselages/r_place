@@ -194,8 +194,12 @@ function startCountDown({duration}){
 
 canvas.addEventListener('click', async (evt) => {
 
+    if(!isLogged){
+        return showError('<p>Please <a href="/login" class="font-semibold underline text-blue-500 hover:opacity-75">login</a> to play</p>');
+    }
+
+
     canvas.style.pointerEvents = 'none';
-    startCountDown({duration:5});
     const x = evt.pageX - evt.target.offsetLeft + canvasCont.scrollLeft;
     const y = evt.pageY - evt.target.offsetTop + canvasCont.scrollTop;
     const realPos = convertPos(x, y);
@@ -225,6 +229,7 @@ canvas.addEventListener('click', async (evt) => {
     data['user_id'] = {'username':userName}
 
     paintCanvas(data);
+    startCountDown({duration:5});
     canvas.removeAttribute('style');
     socket.emit('pixel', data);
     socket.emit('log', {'name': userName, 'action': 'paint', 'color': data.color});
