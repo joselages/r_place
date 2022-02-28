@@ -14,12 +14,6 @@ const validationSchema = joi.object({
 const { dirname } = require('path');
 const appDir = dirname(require.main.filename);
 
-router.get('/', (req,res) => {
-
-    res.sendFile(appDir+'/front/login.html')
-
-})
-
 router.post('/', async (req, res) => {
 
     const login = req.body;
