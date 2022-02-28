@@ -10,7 +10,7 @@ const infoWindow = document.querySelector('.js-infoWindow');
 const closeMenu = document.querySelector('.js-hideMenu');
 const openMenu = document.querySelector('.js-openMenu');
 const sideMenu = document.querySelector('.js-sideMenu');
-
+const mainContainer = document.querySelector('.js-mainConatiner');
 
 closeMenu.addEventListener('click',() => {
     closeMenu.classList.add('hidden');
@@ -169,7 +169,11 @@ function addZeroBefore(n) {
 
 canvas.addEventListener('mouseleave', () => {pixelInfo.style.display = 'none'});
 
+let countDownOn = false;
 function startCountDown({duration}){
+
+    canvas.style.cursor = 'not-allowed';
+    countDownOn = true;
 
     let start = duration;
 
@@ -179,7 +183,7 @@ function startCountDown({duration}){
     const timeFeedbackNumber = document.createElement('span');
     timeFeedbackNumber.textContent = start;
     timeFeedbackOverlay.append(timeFeedbackNumber);
-    document.querySelector('body').appendChild(timeFeedbackOverlay);
+    mainContainer.appendChild(timeFeedbackOverlay);
 
     //countdown interval
     const countDown = setInterval(() => {
@@ -188,6 +192,8 @@ function startCountDown({duration}){
         if(start <= 0){
             clearInterval(countDown)
             timeFeedbackOverlay.remove();
+            canvas.removeAttribute('style');
+            countDownOn = false;
         }
     }, 1000);
 }
@@ -198,9 +204,13 @@ canvas.addEventListener('click', async (evt) => {
         return showError('<p>Please <a href="/login" class="font-semibold underline text-blue-500 hover:opacity-75">login</a> to play</p>');
     }
 
+    if(countDownOn){
+        return;
+    }
+
     startCountDown({duration:5});
 
-    canvas.style.pointerEvents = 'none';
+
     const x = evt.pageX - evt.target.offsetLeft + canvasCont.scrollLeft;
     const y = evt.pageY - evt.target.offsetTop + canvasCont.scrollTop;
     const realPos = convertPos(x, y);
@@ -210,7 +220,6 @@ canvas.addEventListener('click', async (evt) => {
         "y":realPos.y,
         "color": pickedColor
     }
-    
     paintCanvas(data);
     
     const request = await fetch('/pixels',{
@@ -232,7 +241,6 @@ canvas.addEventListener('click', async (evt) => {
     data['user_id'] = {'username':userName}
 
 
-    canvas.removeAttribute('style');
     socket.emit('pixel', data);
     socket.emit('log', {'name': userName, 'action': 'paint', 'color': data.color});
 });
