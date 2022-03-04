@@ -34,7 +34,10 @@ io.on('connection', (socket) => {
     io.emit('user count', socket.client.conn.server.clientsCount)
 
     socket.on('log', (data) =>  {
-        io.emit('checkin', data)
+        if(data.action !== 'paint'){
+           return io.emit('checkin', data);
+        }
+        socket.broadcast.emit('checkin', data);
     });
 
     socket.on('disconnect', () => io.emit('user count', socket.client.conn.server.clientsCount));

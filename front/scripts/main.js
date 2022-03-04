@@ -67,6 +67,28 @@ async function getPixels(){
 }
 
 let pixels;
+
+function tellAction(data){
+    const newSpan = document.createElement('span');
+    let msg = '';
+    switch (data.action) {
+        case 'login':
+            msg = 'Welcome <b>' + data.name + '</b>!';
+            break;
+        case 'paint':
+            msg = 'Nice <b style="color:'+data.color+'">pixel</b>, <b>' + data.name + '</b>!';
+
+            if(data.color === "#ffffff"){
+                msg = 'Nice <b style="padding:2px;background:black;color:'+data.color+'">pixel</b>, <b>' + data.name + '</b>!';
+            }
+
+            break;
+    }
+
+    newSpan.innerHTML = msg;
+    infoWindow.appendChild(newSpan);
+}
+
 document.addEventListener('DOMContentLoaded', async () => {
 
     canvas.style.pointerEvents = 'none';
@@ -75,7 +97,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     pixels = await getPixels();
     
-    for(pixel of pixels){
+    for(const pixel of pixels){
         paintCanvas(pixel);
     }
 
@@ -86,26 +108,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         socket.emit('log', {'name': userName, action: 'login'});
     }
     
-    socket.on('checkin', (data) => {
-        const newSpan = document.createElement('span');
-        let msg = '';
-        switch (data.action) {
-            case 'login':
-                msg = 'Welcome <b>' + data.name + '</b>!';
-                break;
-            case 'paint':
-                msg = 'Nice <b style="color:'+data.color+'">pixel</b>, <b>' + data.name + '</b>!';
-
-                if(data.color === "#ffffff"){
-                    msg = 'Nice <b style="padding:2px;background:black;color:'+data.color+'">pixel</b>, <b>' + data.name + '</b>!';
-                }
-
-                break;
-        }
-
-        newSpan.innerHTML = msg;
-        infoWindow.appendChild(newSpan);
-    });
+    socket.on('checkin', (data) => tellAction(data));
 
 })
 
@@ -220,7 +223,13 @@ canvas.addEventListener('click', async (evt) => {
         "y":realPos.y,
         "color": pickedColor
     }
+
     paintCanvas(data);
+    tellAction({
+        action:'paint',
+        name: userName,
+        color: data.color,
+    })
     
     const request = await fetch('/pixels',{
         method: 'POST',
